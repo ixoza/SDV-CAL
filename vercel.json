@@ -20,6 +20,10 @@
   ],
   "routes": [
     {
+      "src": "/api/tt-days/toggle",
+      "dest": "/api/tt-days/toggle.js"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "/api/$1"
     },

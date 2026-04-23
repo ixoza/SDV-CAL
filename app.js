@@ -65,7 +65,7 @@ async function fetchSharedDays() {
 }
 
 async function toggleSharedDay(isoDate) {
-  const response = await fetch("/api/tt-days/toggle", {
+  const response = await fetch("/api/tt-days/toggle.js", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
