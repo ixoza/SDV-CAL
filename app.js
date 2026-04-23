@@ -89,6 +89,11 @@ function createDayButton(date, isCurrentMonth) {
 
   const iso = toISODate(date);
 
+  const dayOfWeek = date.getDay();
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    btn.classList.add("weekend");
+  }
+
   if (iso === toISODate(today)) {
     btn.classList.add("today");
   }

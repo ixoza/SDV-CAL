@@ -1,12 +1,17 @@
 :root {
-  --bg: #f4efe7;
-  --card: #fffaf2;
-  --ink: #152231;
-  --ink-soft: #526170;
-  --accent: #e86a33;
-  --accent-soft: #ffd8c8;
-  --line: #ecd8c7;
-  --shadow: 0 18px 42px rgba(52, 39, 23, 0.16);
+  --bg: #0f0620;
+  --bg-2: #1a0f3a;
+  --card: #1c1240;
+  --card-soft: #25165a;
+
+  --text: #ffffff;
+  --text-soft: #b8b2d1;
+
+  --accent: linear-gradient(90deg, #7b5cff, #ff7a18);
+  --accent-solid: #7b5cff;
+
+  --border: rgba(255,255,255,0.08);
+  --shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 
 * {
@@ -16,16 +21,15 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Space Grotesk", "Segoe UI", sans-serif;
-  color: var(--ink);
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--text);
   background:
-    radial-gradient(circle at 8% 16%, #f8d7b2 0%, transparent 34%),
-    radial-gradient(circle at 88% 78%, #bde4dd 0%, transparent 38%),
-    var(--bg);
+    radial-gradient(circle at 20% 20%, #2a1a6c 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, #ff7a1820 0%, transparent 40%),
+    linear-gradient(160deg, var(--bg), var(--bg-2));
   display: flex;
   justify-content: center;
-  padding: 28px 14px;
-  overflow-x: hidden;
+  padding: 40px 16px;
 }
 
 .bg-shape {
@@ -63,21 +67,19 @@ body {
 
 .summary-card,
 .calendar-card {
-  background: linear-gradient(155deg, #fffaf2 0%, #fff6eb 100%);
-  border: 1px solid var(--line);
-  border-radius: 24px;
+  background: linear-gradient(160deg, var(--card), var(--card-soft));
+  border: 1px solid var(--border);
+  border-radius: 28px;
   box-shadow: var(--shadow);
-  padding: 24px;
-  animation: rise 460ms ease-out both;
+  padding: 26px;
+  backdrop-filter: blur(12px);
 }
 
 .kicker {
-  margin: 0;
+  color: #8f87c7;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-  font-size: 0.76rem;
-  color: #935b3f;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
 }
 
 h1,
@@ -88,7 +90,7 @@ h2 {
 
 h1 {
   margin-top: 10px;
-  font-size: clamp(1.45rem, 2vw, 2.05rem);
+  font-size: 2rem;
 }
 
 .tt-count-wrap {
@@ -99,10 +101,11 @@ h1 {
 }
 
 .tt-count {
-  font-size: clamp(2.8rem, 7vw, 4.2rem);
+  font-size: 4rem;
   font-weight: 700;
-  line-height: 1;
-  color: var(--accent);
+  background: var(--accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .tt-label {
@@ -144,20 +147,18 @@ h1 {
 }
 
 .nav-btn {
-  border: 1px solid #d4b9a2;
-  background: #fff;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  font-size: 1.15rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  color: white;
+  border-radius: 999px;
+  width: 42px;
+  height: 42px;
   cursor: pointer;
-  color: #9b522f;
-  transition: transform 120ms ease, background 160ms ease;
+  transition: 0.2s;
 }
 
 .nav-btn:hover {
-  background: #ffe8d9;
-  transform: translateY(-1px);
+  background: linear-gradient(90deg, #7b5cff, #ff7a18);
 }
 
 .weekday-row,
@@ -180,21 +181,29 @@ h1 {
 }
 
 .day {
-  border: 1px solid #e9d7c8;
-  border-radius: 12px;
-  min-height: 68px;
-  background: #fff;
-  text-align: left;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  min-height: 70px;
   padding: 8px;
-  font-family: "IBM Plex Mono", monospace;
-  color: #2f3a46;
+  color: var(--text-soft);
   cursor: pointer;
-  transition: background 140ms ease, border-color 140ms ease, transform 140ms ease;
+  transition: 0.2s;
 }
 
 .day:hover {
-  transform: translateY(-1px);
-  border-color: #d8af8f;
+  transform: translateY(-2px);
+  border-color: #7b5cff;
+}
+
+.day.today {
+  border: 1px solid #7b5cff;
+}
+
+.day.tt {
+  background: linear-gradient(160deg, #7b5cff33, #ff7a1833);
+  border-color: #7b5cff;
+  color: white;
 }
 
 .day.muted {
@@ -202,16 +211,14 @@ h1 {
   color: #aa9a8b;
 }
 
-.day.today {
-  outline: 2px solid #2a9d8f;
-  outline-offset: -2px;
-}
-
-.day.tt {
-  background: linear-gradient(165deg, var(--accent-soft) 0%, #ffd0ba 100%);
-  border-color: #e98d62;
-  color: #5e2b17;
-  font-weight: 500;
+.day.weekend:not(.tt) {
+  background: linear-gradient(
+    160deg,
+    rgba(123, 92, 255, 0.15),
+    rgba(255, 122, 24, 0.15)
+  );
+  border-color: rgba(255, 122, 24, 0.4);
+  color: #ffd2b8;
 }
 
 @keyframes rise {
