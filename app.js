@@ -34,6 +34,10 @@ function setSyncStatus(text, isError = false) {
 }
 
 async function readJsonResponse(response, fallbackMessage) {
+  if (response.status === 401) {
+    throw new Error("Déploiement protégé (401): désactive la protection Vercel pour ce domaine.");
+  }
+
   let payload = null;
 
   try {
