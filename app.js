@@ -109,7 +109,7 @@ function createDayButton(date, isCurrentMonth) {
       await toggleSharedDay(iso);
       updateCount();
       renderCalendar(currentYear, currentMonth);
-      setSyncStatus("Données partagées: tout le monde voit la même chose.");
+      setSyncStatus("");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Erreur de synchronisation. Reessaie dans un instant.";
       setSyncStatus(message, true);
@@ -172,7 +172,7 @@ async function init() {
     await fetchSharedDays();
     updateCount();
     renderCalendar(currentYear, currentMonth);
-    setSyncStatus("Données partagées: tout le monde voit la même chose.");
+    setSyncStatus("");
   } catch (error) {
     updateCount();
     renderCalendar(currentYear, currentMonth);

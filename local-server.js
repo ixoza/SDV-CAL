@@ -46,7 +46,16 @@ app.get("/api/tt-days", (_req, res) => {
 });
 
 app.post("/api/tt-days/toggle", (req, res) => {
-  const date = req.body && req.body.date;
+  let body = req.body;
+  if (typeof body === "string") {
+    try {
+      body = JSON.parse(body);
+    } catch {
+      body = null;
+    }
+  }
+
+  const date = body && body.date;
 
   if (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     res.status(400).json({ error: "Date invalide. Format attendu: YYYY-MM-DD" });
