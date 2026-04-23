@@ -33,13 +33,29 @@ function setSyncStatus(text, isError = false) {
   syncStatusEl.classList.toggle("error", isError);
 }
 
-async function fetchSharedDays() {
-  const response = await fetch("/api/tt-days");
-  if (!response.ok) {
-    throw new Error("Impossible de charger les jours TT partages");
+async function readJsonResponse(response, fallbackMessage) {
+  let payload = null;
+
+  try {
+    payload = await response.json();
+  } catch {
+    if (!response.ok) {
+      throw new Error(fallbackMessage);
+    }
+    return {};
   }
 
-  const payload = await response.json();
+  if (!response.ok) {
+    const details = payload && typeof payload.error === "string" ? payload.error : fallbackMessage;
+    throw new Error(details);
+  }
+
+  return payload;
+}
+
+async function fetchSharedDays() {
+  const response = await fetch("/api/tt-days");
+  const payload = await readJsonResponse(response, "Impossible de charger les jours TT partages");
   const days = Array.isArray(payload.days) ? payload.days : [];
   ttDays = new Set(days);
 }
@@ -53,11 +69,7 @@ async function toggleSharedDay(isoDate) {
     body: JSON.stringify({ date: isoDate })
   });
 
-  if (!response.ok) {
-    throw new Error("Impossible de synchroniser ce jour");
-  }
-
-  const payload = await response.json();
+  const payload = await readJsonResponse(response, "Impossible de synchroniser ce jour");
   const days = Array.isArray(payload.days) ? payload.days : [];
   ttDays = new Set(days);
 }
@@ -94,8 +106,9 @@ function createDayButton(date, isCurrentMonth) {
       updateCount();
       renderCalendar(currentYear, currentMonth);
       setSyncStatus("Données partagées: tout le monde voit la même chose.");
-    } catch {
-      setSyncStatus("Erreur de synchronisation. Reessaie dans un instant.", true);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Erreur de synchronisation. Reessaie dans un instant.";
+      setSyncStatus(message, true);
     } finally {
       btn.disabled = false;
     }
@@ -156,10 +169,11 @@ async function init() {
     updateCount();
     renderCalendar(currentYear, currentMonth);
     setSyncStatus("Données partagées: tout le monde voit la même chose.");
-  } catch {
+  } catch (error) {
     updateCount();
     renderCalendar(currentYear, currentMonth);
-    setSyncStatus("Mode degrade: le serveur est inaccessible.", true);
+    const message = error instanceof Error ? error.message : "Mode degrade: le serveur est inaccessible.";
+    setSyncStatus(message, true);
   }
 }
 
