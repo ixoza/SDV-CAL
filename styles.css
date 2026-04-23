@@ -129,12 +129,6 @@ h1 {
   color: #b42318;
 }
 
-.hint {
-  margin: 12px 0 0;
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-}
-
 .calendar-header {
   display: flex;
   align-items: center;
